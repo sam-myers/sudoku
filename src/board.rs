@@ -1,6 +1,7 @@
 use std::fmt;
 
 use crate::tile::Tile;
+use crate::num::Num;
 
 pub struct Board {
     grid: [[Tile; 9]; 9]
@@ -21,6 +22,22 @@ impl Board {
                 Board::new_row(),
             ]
         }
+    }
+
+    pub fn given(mut self, x: usize, y: usize, num: Num) -> Self {
+        self.grid[x][y] = Tile::Known(num);
+        self
+    }
+
+    pub fn is_done(&self) -> bool {
+        for i in 0..8 {
+            for j in 0..8 {
+                if let Tile::Possibilities(_) = self.grid[i][j] {
+                    return false;
+                }
+            }
+        }
+        true
     }
 
     fn new_row() -> [Tile; 9] {
