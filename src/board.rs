@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::error::{InvalidPuzzle, Result};
+use crate::error_invalid_puzzle::{InvalidPuzzle, InvalidPuzzleResult};
 use crate::tile::Tile;
 use crate::num::Num;
 
@@ -27,7 +27,7 @@ impl Board {
         }
     }
 
-    pub fn given(mut self, x: usize, y: usize, num: Num) -> Result<Self> {
+    pub fn given(mut self, x: usize, y: usize, num: Num) -> InvalidPuzzleResult<Self> {
         let tile = Tile::Known(num);
 
         for i in 0..9 {

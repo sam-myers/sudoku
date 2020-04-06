@@ -1,9 +1,9 @@
 use crate::board::Board;
-use crate::error::Result;
+use crate::error_invalid_puzzle::InvalidPuzzleResult;
 use crate::num;
 
 #[allow(dead_code)]
-pub fn board_1() -> Result<Board> {
+pub fn board_1() -> InvalidPuzzleResult<Board> {
     Board::new()
         .given(0, 0, num::Num::Three)?
         .given(0, 5, num::Num::Two)?
@@ -41,7 +41,7 @@ pub fn board_1() -> Result<Board> {
 }
 
 #[allow(dead_code)]
-pub fn board_2() -> Result<Board> {
+pub fn board_2() -> InvalidPuzzleResult<Board> {
     Board::new()
         .given(0, 0, num::Num::Eight)?
         .given(0, 1, num::Num::Two)?
@@ -137,28 +137,28 @@ pub fn board_2() -> Result<Board> {
 }
 
 #[allow(dead_code)]
-fn invalid_1() -> Result<Board> {
+fn invalid_1() -> InvalidPuzzleResult<Board> {
     Board::new()
         .given(0, 0, num::Num::Three)?
         .given(0, 8, num::Num::Three)
 }
 
 #[allow(dead_code)]
-fn invalid_2() -> Result<Board> {
+fn invalid_2() -> InvalidPuzzleResult<Board> {
     Board::new()
         .given(0, 0, num::Num::Three)?
         .given(7, 0, num::Num::Three)
 }
 
 #[allow(dead_code)]
-fn invalid_3() -> Result<Board> {
+fn invalid_3() -> InvalidPuzzleResult<Board> {
     Board::new()
         .given(0, 0, num::Num::Three)?
         .given(2, 2, num::Num::Three)
 }
 
 #[allow(dead_code)]
-fn invalid_vertical_1() -> Result<Board> {
+fn invalid_vertical_1() -> InvalidPuzzleResult<Board> {
     Board::new()
         .given(0, 0, num::Num::One)?
 //        .given(1, 0, num::Num::Three)?
@@ -172,7 +172,7 @@ fn invalid_vertical_1() -> Result<Board> {
 }
 
 #[allow(dead_code)]
-fn invalid_horizontal_1() -> Result<Board> {
+fn invalid_horizontal_1() -> InvalidPuzzleResult<Board> {
     Board::new()
         .given(0, 0, num::Num::One)?
 //        .given(0, 1, num::Num::Three)?
@@ -186,7 +186,7 @@ fn invalid_horizontal_1() -> Result<Board> {
 }
 
 #[allow(dead_code)]
-fn invalid_grid_1() -> Result<Board> {
+fn invalid_grid_1() -> InvalidPuzzleResult<Board> {
     Board::new()
         .given(0, 0, num::Num::One)?
 //        .given(0, 1, num::Num::Three)?
@@ -200,7 +200,7 @@ fn invalid_grid_1() -> Result<Board> {
 }
 
 #[allow(dead_code)]
-pub fn invalid_grid_2() -> Result<Board> {
+pub fn invalid_grid_2() -> InvalidPuzzleResult<Board> {
     Board::new()
         .given(6, 6, num::Num::One)?
 //        .given(6, 7, num::Num::Three)?

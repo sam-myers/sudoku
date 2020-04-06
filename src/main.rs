@@ -1,5 +1,8 @@
 mod board;
-mod error;
+mod error_import;
+mod error_invalid_puzzle;
+mod importer;
+mod importer_sdk;
 mod num;
 mod sample_boards;
 mod tile;
