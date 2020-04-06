@@ -1,8 +1,6 @@
 use std::error;
 use std::fmt;
 
-pub type InvalidPuzzleResult<T> = std::result::Result<T, InvalidPuzzle>;
-
 #[derive(Debug, Clone)]
 pub struct InvalidPuzzle;
 
