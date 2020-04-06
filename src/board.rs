@@ -4,8 +4,8 @@ use crate::tile::Tile;
 use crate::num::Num;
 
 pub struct Board {
-    pub grid: [[Tile; 9]; 9],
-    pub sweeps: usize,
+    grid: [[Tile; 9]; 9],
+    sweeps: u32,
 }
 
 impl Board {
@@ -29,6 +29,10 @@ impl Board {
     pub fn given(mut self, x: usize, y: usize, num: Num) -> Self {
         self.grid[x][y] = Tile::Known(num);
         self
+    }
+
+    pub fn sweeps(&self) -> u32 {
+        self.sweeps
     }
 
     pub fn is_done(&self) -> bool {

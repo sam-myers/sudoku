@@ -8,5 +8,5 @@ fn main() {
     println!("{}", b);
     b.solve();
     println!("{}", b);
-    println!("sweeps required: {}", b.sweeps);
+    println!("sweeps required: {}", b.sweeps());
 }
