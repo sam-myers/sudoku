@@ -1,5 +1,6 @@
 use std::fmt;
 
+use crate::error::{InvalidPuzzle, Result};
 use crate::tile::Tile;
 use crate::num::Num;
 
@@ -26,9 +27,43 @@ impl Board {
         }
     }
 
-    pub fn given(mut self, x: usize, y: usize, num: Num) -> Self {
-        self.grid[x][y] = Tile::Known(num);
-        self
+    pub fn given(mut self, x: usize, y: usize, num: Num) -> Result<Self> {
+        let tile = Tile::Known(num);
+
+        for i in 0..9 {
+            // Horizontal
+            if self.grid[i][y] == tile {
+                return Err(InvalidPuzzle)
+            }
+
+            // Vertical
+            if self.grid[x][i] == tile {
+                return Err(InvalidPuzzle)
+            }
+        }
+
+        let grid_x: usize = x / 3;
+        let grid_y: usize = y / 3;
+
+        for i in 0..3 {
+            for j in 0..3 {
+
+                let check_x = grid_x*3 + i;
+                let check_y = grid_y*3 + j;
+
+                if check_x == x && check_y == y {
+                    continue;
+                }
+
+                // Grid
+                if self.grid[check_x][check_y] == tile {
+                    return Err(InvalidPuzzle)
+                }
+            }
+        }
+
+        self.grid[x][y] = tile;
+        Ok(self)
     }
 
     pub fn sweeps(&self) -> u32 {
@@ -77,8 +112,15 @@ impl Board {
 
             for i in 0..3 {
                 for j in 0..3 {
+                    let check_x = grid_x*3 + i;
+                    let check_y = grid_y*3 + j;
+
+                    if check_x == x && check_y == y {
+                        continue;
+                    }
+
                     // Grid
-                    self.grid[grid_x+i][grid_y+j] = self.grid[grid_x+i][grid_y+j].remove_possibility(n);
+                    self.grid[check_x][check_y] = self.grid[check_x][check_y].remove_possibility(n);
                 }
             }
         }

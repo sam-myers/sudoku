@@ -3,7 +3,7 @@ use std::fmt;
 use crate::num::Num;
 use crate::tile::Tile::{Known, Possibilities};
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum Tile {
     Known(Num),
     Possibilities([bool; 9]),
