@@ -4,7 +4,8 @@ use crate::tile::Tile;
 use crate::num::Num;
 
 pub struct Board {
-    grid: [[Tile; 9]; 9]
+    pub grid: [[Tile; 9]; 9],
+    pub sweeps: usize,
 }
 
 impl Board {
@@ -20,7 +21,8 @@ impl Board {
                 Board::new_row(),
                 Board::new_row(),
                 Board::new_row(),
-            ]
+            ],
+            sweeps: 0,
         }
     }
 
@@ -30,14 +32,52 @@ impl Board {
     }
 
     pub fn is_done(&self) -> bool {
-        for i in 0..8 {
-            for j in 0..8 {
+        for i in 0..9 {
+            for j in 0..9 {
                 if let Tile::Possibilities(_) = self.grid[i][j] {
                     return false;
                 }
             }
         }
         true
+    }
+
+    pub fn solve(&mut self) {
+        while !self.is_done() && self.sweeps < 1000 {
+            self.solve_sweep()
+        }
+    }
+
+    pub fn solve_sweep(&mut self) {
+        for i in 0..9 {
+            for j in 0..9 {
+                self.sweep_tile(i, j);
+            }
+        }
+        self.sweeps += 1;
+    }
+
+    fn sweep_tile(&mut self, x: usize, y: usize) {
+        if let Some(n) = &self.grid[x][y].num() {
+
+            for i in 0..9 {
+                // Vertical
+                self.grid[i][y] = self.grid[i][y].remove_possibility(n);
+
+                // Horizontal
+                self.grid[x][i] = self.grid[x][i].remove_possibility(n);
+            }
+
+            let grid_x: usize = x / 3;
+            let grid_y: usize = y / 3;
+
+            for i in 0..3 {
+                for j in 0..3 {
+                    // Grid
+                    self.grid[grid_x+i][grid_y+j] = self.grid[grid_x+i][grid_y+j].remove_possibility(n);
+                }
+            }
+        }
     }
 
     fn new_row() -> [Tile; 9] {
