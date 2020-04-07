@@ -3,31 +3,41 @@ use crate::error_import::*;
 use crate::importer::Importer;
 use crate::num::Num;
 
-use std::error;
-use std::io::BufRead;
+use std::io::Read;
 use std::vec::Vec;
-
-type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
 
 pub struct SDKImporter;
 
 impl Importer for SDKImporter {
-    fn parse<R: BufRead>(reader: &mut R) -> Result<Board> {
+    fn parse<R: Read>(&self, reader: &mut R) -> Result<Board, ImportError> {
         let mut bytes: Vec<u8> = Vec::with_capacity(91);
         reader.read_to_end(&mut bytes);
+
+        let tiles: Vec<char> = bytes.iter().map(|b| *b as char).filter(|b| match b {
+            '1'...'9'  => true,
+            '.'        => true,
+            _          => false
+        }).collect();
 
         let mut board = Board::new();
 
         let mut index = 0;
         for x in 0..9 {
             for y in 0..9 {
-                match bytes[index] as char {
-                    '1'..'9' => { board = board.given(x, y, Num::from_int(bytes[index]-48).expect("SDKImporter bug"))?; index += 1; },
-                    '.' => index += 1,
-                    '\n' => (),
-                    '#' => return Err(Box::New(ImportError)), // Comments not supported
-                    _ => return Err(ImportError), // Unknown field
+                match *tiles.get(index).unwrap() as char {
+                    '1' => board = board.given(x, y, Num::One)?,
+                    '2' => board = board.given(x, y, Num::Two)?,
+                    '3' => board = board.given(x, y, Num::Three)?,
+                    '4' => board = board.given(x, y, Num::Four)?,
+                    '5' => board = board.given(x, y, Num::Five)?,
+                    '6' => board = board.given(x, y, Num::Six)?,
+                    '7' => board = board.given(x, y, Num::Seven)?,
+                    '8' => board = board.given(x, y, Num::Eight)?,
+                    '9' => board = board.given(x, y, Num::Nine)?,
+                    '.' => (),
+                    _   => return Err(ImportError), // Should have been already filtered
                 }
+                index += 1;
             }
         }
 

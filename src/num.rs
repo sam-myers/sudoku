@@ -1,6 +1,3 @@
-use term::terminfo::parm::Param::Number;
-use test::Concurrent::No;
-
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum Num {
     One,
