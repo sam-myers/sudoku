@@ -7,9 +7,11 @@ mod num;
 mod sample_boards;
 mod tile;
 
-use clap::{Arg, App, SubCommand};
+use clap::{Arg, App, SubCommand, ArgMatches, AppSettings};
 use std::path::Path;
 use std::fs::File;
+use std::process::exit;
+
 use crate::importer::Importer;
 use crate::importer_sdk::SDKImporter;
 
@@ -18,6 +20,7 @@ fn main() {
     let matches = App::new("sudoku")
         .version("0.0.1")
         .about("Sudoku puzzle utilities")
+        .setting(AppSettings::ArgRequiredElseHelp)
         .subcommand(SubCommand::with_name("solve")
             .about("Solve a puzzle")
             .arg(Arg::with_name("input")
@@ -28,19 +31,24 @@ fn main() {
         .get_matches();
 
     if let Some(solve_matches) = matches.subcommand_matches("solve") {
-        let filename = solve_matches.value_of("input").unwrap();
-        let path = Path::new(filename);
-        let display = path.display();
-
-        let mut file = match File::open(&path) {
-            Err(why) => println!("Couldn't open file {}: {}", display, why.to_string()),
-            Ok(mut file)  => {
-                let i = Box::new(SDKImporter);
-                let mut b = i.parse(&mut file).expect("trouble importing");
-                println!("{}", b);
-                b.solve();
-                println!("{}", b);
-            },
-        };
+        if let Err(e) = solve(solve_matches) {
+            match e {
+                error_import::ImportError => println!("Couldn't import puzzle"),
+            }
+            exit(1);
+        }
+        exit(0);
     }
+}
+
+fn solve(matches: &ArgMatches) -> Result<(), error_import::ImportError> {
+    let filename = matches.value_of("input").unwrap();
+    let path = Path::new(filename);
+    let mut file = File::open(&path)?;
+    let mut b = SDKImporter.parse(&mut file)?;
+
+    println!("{}", b);
+    b.solve();
+    println!("{}", b);
+    Ok(())
 }
