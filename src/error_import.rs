@@ -27,3 +27,9 @@ impl From<InvalidPuzzle> for ImportError {
         ImportError
     }
 }
+
+impl From<std::io::Error> for ImportError {
+    fn from(_: std::io::Error) -> Self {
+        ImportError
+    }
+}

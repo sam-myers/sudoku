@@ -14,7 +14,7 @@ impl Importer for SDKImporter {
         reader.read_to_end(&mut bytes);
 
         let tiles: Vec<char> = bytes.iter().map(|b| *b as char).filter(|b| match b {
-            '1'...'9'  => true,
+            '1'..='9'  => true,
             '.'        => true,
             _          => false
         }).collect();
