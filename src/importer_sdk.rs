@@ -1,17 +1,50 @@
 use crate::board::Board;
 use crate::error_import::*;
 use crate::importer::Importer;
+use crate::num::Num;
 
-use std::io::BufRead;
+use std::io::Read;
 use std::vec::Vec;
 
 pub struct SDKImporter;
 
 impl Importer for SDKImporter {
-    fn parse<R: BufRead>(reader: &mut R) -> ImportErrorResult<Board> {
-        let mut bytes: Vec<u8> = Vec::new();
+    fn parse<R: Read>(&self, reader: &mut R) -> Result<Board, ImportError> {
+        let mut bytes: Vec<u8> = Vec::with_capacity(91);
         reader.read_to_end(&mut bytes);
 
-        Err(ImportError)
+        let tiles: Vec<char> = bytes.iter().map(|b| *b as char).filter(|b| match b {
+            '1'...'9'  => true,
+            '.'        => true,
+            _          => false
+        }).collect();
+
+        let mut board = Board::new();
+
+        let mut index = 0;
+        for x in 0..9 {
+            for y in 0..9 {
+                match *tiles.get(index).unwrap() as char {
+                    '1' => board = board.given(x, y, Num::One)?,
+                    '2' => board = board.given(x, y, Num::Two)?,
+                    '3' => board = board.given(x, y, Num::Three)?,
+                    '4' => board = board.given(x, y, Num::Four)?,
+                    '5' => board = board.given(x, y, Num::Five)?,
+                    '6' => board = board.given(x, y, Num::Six)?,
+                    '7' => board = board.given(x, y, Num::Seven)?,
+                    '8' => board = board.given(x, y, Num::Eight)?,
+                    '9' => board = board.given(x, y, Num::Nine)?,
+                    '.' => (),
+                    _   => return Err(ImportError), // Should have been already filtered
+                }
+                index += 1;
+            }
+        }
+
+        if index == 81 {
+            Ok(board)
+        } else {
+            Err(ImportError)
+        }
     }
 }

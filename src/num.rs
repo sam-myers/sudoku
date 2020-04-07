@@ -25,4 +25,19 @@ impl Num {
             Num::Nine  => 9,
         }
     }
+
+    pub fn from_int(i: u8) -> Option<Num> {
+        match i {
+            1 => Some(Num::One),
+            2 => Some(Num::Two),
+            3 => Some(Num::Three),
+            4 => Some(Num::Four),
+            5 => Some(Num::Five),
+            6 => Some(Num::Six),
+            7 => Some(Num::Seven),
+            8 => Some(Num::Eight),
+            9 => Some(Num::Nine),
+            _ => None
+        }
+    }
 }
