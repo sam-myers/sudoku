@@ -1,5 +1,4 @@
 use crate::board::Board;
-use crate::error_invalid_puzzle::InvalidPuzzle;
 use crate::strategy::Strategy;
 use crate::tile::Tile;
 
@@ -39,12 +38,12 @@ impl SweepTileStrategy {
 }
 
 impl Strategy for SweepTileStrategy {
-    fn round(&self, mut board: Board) -> Result<Board, InvalidPuzzle> {
+    fn round(&self, mut board: Board) -> Board {
         for x in 0..9 {
             for y in 0..9 {
                 board = self.sweep_tile(board, x, y);
             }
         }
-        Ok(board)
+        board
     }
 }

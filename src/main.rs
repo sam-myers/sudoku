@@ -53,7 +53,7 @@ fn solve(matches: &ArgMatches) -> Result<(), error_import::ImportError> {
 
     println!("{}", b);
     while !b.is_done() {
-        b = SweepTileStrategy.round(b).unwrap();
+        b = SweepTileStrategy.round(b);
     }
     println!("{}", b);
     Ok(())
