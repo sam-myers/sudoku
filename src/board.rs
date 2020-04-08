@@ -125,3 +125,38 @@ impl fmt::Display for Board {
         )
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::test_utils::get_test;
+
+    #[test]
+    fn test_valid_1() {
+        assert!(get_test("single_tile").is_ok());
+    }
+
+    #[test]
+    fn test_valid_2() {
+        assert!(get_test("vertical_7").is_ok());
+    }
+
+    #[test]
+    fn test_valid_3() {
+        assert!(get_test("vertical_8").is_ok());
+    }
+
+    #[test]
+    fn test_invalid_1() {
+        assert!(get_test("invalid_1").is_err());
+    }
+
+    #[test]
+    fn test_invalid_2() {
+        assert!(get_test("invalid_2").is_err());
+    }
+
+    #[test]
+    fn test_invalid_3() {
+        assert!(get_test("invalid_3").is_err());
+    }
+}
