@@ -128,6 +128,7 @@ impl fmt::Display for Board {
 
 #[cfg(test)]
 mod tests {
+    use crate::error::ImportError;
     use crate::test_utils::get_test;
 
     #[test]
@@ -147,16 +148,26 @@ mod tests {
 
     #[test]
     fn test_invalid_1() {
-        assert!(get_test("invalid_1").is_err());
+        let b = get_test("invalid_1");
+        match b {
+            Err(ImportError::InvalidPuzzle) => (),
+            _ => panic!(),
+        }
     }
 
     #[test]
     fn test_invalid_2() {
-        assert!(get_test("invalid_2").is_err());
-    }
+        let b = get_test("invalid_2");
+        match b {
+            Err(ImportError::InvalidPuzzle) => (),
+            _ => panic!(),
+        }    }
 
     #[test]
     fn test_invalid_3() {
-        assert!(get_test("invalid_3").is_err());
-    }
+        let b = get_test("invalid_3");
+        match b {
+            Err(ImportError::InvalidPuzzle) => (),
+            _ => panic!(),
+        }    }
 }

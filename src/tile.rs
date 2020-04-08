@@ -39,7 +39,7 @@ impl Tile {
             Possibilities([false, false, false, false, false, false, false, true, false]) => Tile::Known(Num::Eight),
             Possibilities([false, false, false, false, false, false, false, false, true]) => Tile::Known(Num::Nine),
 
-            Possibilities([false, false, false, false, false, false, false, false, false]) => { panic!("broken invariant: no possibilities left") },
+            Possibilities([false, false, false, false, false, false, false, false, false]) => { unreachable!() },
             Possibilities(arr) => Tile::Possibilities(arr),
             Known(_) => self,
         }

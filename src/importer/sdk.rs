@@ -26,7 +26,7 @@ impl Importer for SDKImporter {
             for y in 0..9 {
                 let tile = tiles.get(index);
                 if tile.is_none() {
-                    return Err(ImportError)
+                    return Err(ImportError::Corruption)
                 }
                 match *tile.unwrap() as char {
                     '1' => board = board.given(x, y, Num::One)?,
@@ -39,7 +39,7 @@ impl Importer for SDKImporter {
                     '8' => board = board.given(x, y, Num::Eight)?,
                     '9' => board = board.given(x, y, Num::Nine)?,
                     '.' => (),
-                    _   => return Err(ImportError), // Should have been already filtered
+                    _   => return Err(ImportError::Corruption), // Should have been already filtered
                 }
                 index += 1;
             }
@@ -48,7 +48,7 @@ impl Importer for SDKImporter {
         if index == 81 {
             Ok(board)
         } else {
-            Err(ImportError)
+            Err(ImportError::Corruption)
         }
     }
 }
