@@ -32,9 +32,7 @@ fn main() {
 
     if let Some(solve_matches) = matches.subcommand_matches("solve") {
         if let Err(e) = solve(solve_matches) {
-            match e {
-                ImportError => println!("Couldn't import puzzle"),
-            }
+           println!("{}", e.to_string());
             exit(1);
         }
         exit(0);
