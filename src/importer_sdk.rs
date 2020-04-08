@@ -24,7 +24,11 @@ impl Importer for SDKImporter {
         let mut index = 0;
         for x in 0..9 {
             for y in 0..9 {
-                match *tiles.get(index).unwrap() as char {
+                let tile = tiles.get(index);
+                if tile.is_none() {
+                    return Err(ImportError)
+                }
+                match *tile.unwrap() as char {
                     '1' => board = board.given(x, y, Num::One)?,
                     '2' => board = board.given(x, y, Num::Two)?,
                     '3' => board = board.given(x, y, Num::Three)?,
@@ -46,5 +50,15 @@ impl Importer for SDKImporter {
         } else {
             Err(ImportError)
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::test_utils::get_test;
+
+    #[test]
+    fn test_corrupt_1() {
+        assert!(get_test("corrupt_1").is_err());
     }
 }

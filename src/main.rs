@@ -4,9 +4,9 @@ mod error_invalid_puzzle;
 mod importer;
 mod importer_sdk;
 mod num;
-mod sample_boards;
 mod strategy;
 mod strategy_sweep_tile;
+mod test_utils;
 mod tile;
 
 use clap::{Arg, App, SubCommand, ArgMatches, AppSettings};
