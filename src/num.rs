@@ -26,6 +26,7 @@ impl Num {
         }
     }
 
+    #[allow(dead_code)]
     pub fn from_int(i: u8) -> Option<Num> {
         match i {
             1 => Some(Num::One),

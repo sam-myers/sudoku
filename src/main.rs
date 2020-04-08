@@ -5,6 +5,8 @@ mod importer;
 mod importer_sdk;
 mod num;
 mod sample_boards;
+mod strategy;
+mod strategy_sweep_tile;
 mod tile;
 
 use clap::{Arg, App, SubCommand, ArgMatches, AppSettings};
@@ -14,6 +16,8 @@ use std::process::exit;
 
 use crate::importer::Importer;
 use crate::importer_sdk::SDKImporter;
+use crate::strategy::Strategy;
+use crate::strategy_sweep_tile::SweepTileStrategy;
 
 fn main() {
 
@@ -48,7 +52,9 @@ fn solve(matches: &ArgMatches) -> Result<(), error_import::ImportError> {
     let mut b = SDKImporter.parse(&mut file)?;
 
     println!("{}", b);
-    b.solve();
+    while !b.is_done() {
+        b = SweepTileStrategy.round(b).unwrap();
+    }
     println!("{}", b);
     Ok(())
 }

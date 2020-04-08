@@ -46,6 +46,7 @@ impl Tile {
         return t
     }
 
+    #[allow(dead_code)]
     pub fn num(&self) -> Option<Num> {
         if let Tile::Known(n) = self {
             return Some(n.clone())
