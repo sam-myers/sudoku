@@ -31,13 +31,11 @@ impl Board {
         for i in 0..9 {
             // Horizontal
             if self.grid[i][y] == tile {
-                println!("x={} y={} horizontal conflict", x, y);
                 return Err(InvalidPuzzle)
             }
 
             // Vertical
             if self.grid[x][i] == tile {
-                println!("x={} y={} vertical conflict", x, y);
                 return Err(InvalidPuzzle)
             }
         }
@@ -57,7 +55,6 @@ impl Board {
 
                 // Grid
                 if self.grid[check_x][check_y] == tile {
-                    println!("x={} y={} grid conflict", x, y);
                     return Err(InvalidPuzzle)
                 }
             }
@@ -76,6 +73,11 @@ impl Board {
             }
         }
         true
+    }
+
+    #[allow(dead_code)]
+    pub fn get(&self, x: usize, y: usize) -> &Tile {
+        &self.grid[x][y]
     }
 
     fn new_row() -> [Tile; 9] {

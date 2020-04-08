@@ -47,3 +47,36 @@ impl Strategy for SweepTileStrategy {
         board
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::num::Num;
+    use crate::sample_boards::*;
+    use crate::tile::Tile;
+
+    #[test]
+    fn test_single_tile() {
+        let mut b = single_tile().unwrap();
+        b = SweepTileStrategy.sweep_tile(b, 0, 0);
+        assert_eq!(b.grid[0][1], Tile::Possibilities([
+            false, true, true, true, true, true, true, true, true,
+        ]))
+    }
+
+    #[test]
+    fn test_seven_vertical() {
+        let mut b = seven_vertical().unwrap();
+        b = SweepTileStrategy.round(b);
+        assert_eq!(b.grid[8][0], Tile::Possibilities([
+            false, false, false, false, false, false, false, true, true,
+        ]))
+    }
+
+    #[test]
+    fn test_eight_vertical() {
+        let mut b = eight_vertical().unwrap();
+        b = SweepTileStrategy.round(b);
+        assert_eq!(b.get(8, 0), &Tile::Known(Num::Nine))
+    }
+}
