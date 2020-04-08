@@ -1,10 +1,8 @@
 on: [push]
-
 name: test
-
 jobs:
   build_and_test:
-    name: Rust project
+    name: sudoku
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

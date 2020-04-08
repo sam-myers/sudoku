@@ -69,7 +69,7 @@ mod tests {
         let mut b = seven_vertical().unwrap();
         b = SweepTileStrategy.round(b);
         assert_eq!(b.grid[8][0], Tile::Possibilities([
-            false, false, false, false, false, false, false, true, true,
+            false, true, false, false, false, false, false, true, true,
         ]))
     }
 
