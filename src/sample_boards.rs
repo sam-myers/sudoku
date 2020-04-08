@@ -137,6 +137,30 @@ pub fn board_2() -> Result<Board, InvalidPuzzle> {
 }
 
 #[allow(dead_code)]
+pub fn single_tile() -> Result<Board, InvalidPuzzle> {
+    Board::new()
+        .given(0, 0, num::Num::One)
+}
+
+#[allow(dead_code)]
+pub fn seven_vertical() -> Result<Board, InvalidPuzzle> {
+    Board::new()
+        .given(0, 0, num::Num::One)?
+        .given(1, 0, num::Num::Two)?
+        .given(2, 0, num::Num::Three)?
+        .given(3, 0, num::Num::Four)?
+        .given(4, 0, num::Num::Five)?
+        .given(5, 0, num::Num::Six)?
+        .given(6, 0, num::Num::Seven)
+}
+
+#[allow(dead_code)]
+pub fn eight_vertical() -> Result<Board, InvalidPuzzle> {
+    seven_vertical()?
+        .given(7, 0, num::Num::Eight)
+}
+
+#[allow(dead_code)]
 fn invalid_1() -> Result<Board, InvalidPuzzle> {
     Board::new()
         .given(0, 0, num::Num::Three)?
@@ -215,7 +239,6 @@ pub fn invalid_grid_2() -> Result<Board, InvalidPuzzle> {
 
 #[cfg(test)]
 mod tests {
-    // Note this useful idiom: importing names from outer (for mod tests) scope.
     use super::*;
 
     #[test]
