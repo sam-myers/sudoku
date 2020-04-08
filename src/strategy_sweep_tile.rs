@@ -9,12 +9,12 @@ impl SweepTileStrategy {
         if let Tile::Known(num) = board.grid[x][y] {
             // Horizontal
             for i in 0..9 {
-                board.grid[i][y] = board.grid[i][y].remove_possibility(&num);
+                board.grid[i][y] = board.grid[i][y].remove_possibility(num);
             }
 
             // Vertical
             for i in 0..9 {
-                board.grid[x][i] = board.grid[x][i].remove_possibility(&num);
+                board.grid[x][i] = board.grid[x][i].remove_possibility(num);
             }
 
             // Grid
@@ -29,7 +29,7 @@ impl SweepTileStrategy {
                         continue;
                     }
 
-                    board.grid[check_x][check_y] = board.grid[check_x][check_y].remove_possibility(&num);
+                    board.grid[check_x][check_y] = board.grid[check_x][check_y].remove_possibility(num);
                 }
             }
         }

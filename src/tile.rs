@@ -14,7 +14,7 @@ impl Tile {
         Tile::Possibilities([true, true, true, true, true, true, true, true, true])
     }
 
-    pub fn remove_possibility(self, num: &Num) -> Tile {
+    pub fn remove_possibility(self, num: Num) -> Tile {
         let t = match self {
             Possibilities(mut arr) => {
                 arr[(num.to_int()-1) as usize] = false;
@@ -26,7 +26,7 @@ impl Tile {
     }
 
     fn reconcile(self) -> Tile {
-        let t = match self {
+        match self {
             Possibilities([true, false, false, false, false, false, false, false, false]) => Tile::Known(Num::One),
             Possibilities([false, true, false, false, false, false, false, false, false]) => Tile::Known(Num::Two),
             Possibilities([false, false, true, false, false, false, false, false, false]) => Tile::Known(Num::Three),
@@ -42,14 +42,13 @@ impl Tile {
             Possibilities([false, false, false, false, false, false, false, false, false]) => { panic!("broken invariant: no possibilities left") },
             Possibilities(arr) => Tile::Possibilities(arr),
             Known(_) => self,
-        };
-        return t
+        }
     }
 
     #[allow(dead_code)]
     pub fn num(&self) -> Option<Num> {
         if let Tile::Known(n) = self {
-            return Some(n.clone())
+            return Some(*n)
         }
         None
     }
@@ -59,7 +58,7 @@ impl fmt::Display for Tile {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Known(n) => write!(f, "{}", n.to_int()),
-            Possibilities(_) => write!(f, "{}", " "),
+            Possibilities(_) => write!(f, " "),
         }
     }
 }

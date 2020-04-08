@@ -6,7 +6,7 @@ use crate::error_invalid_puzzle::InvalidPuzzle;
 #[derive(Debug, Clone)]
 pub struct ImportError;
 
-const DESCRIPTION: &'static str = "unable to import puzzle";
+const DESCRIPTION: &str = "unable to import puzzle";
 
 impl fmt::Display for ImportError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

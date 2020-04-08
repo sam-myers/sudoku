@@ -12,7 +12,7 @@ pub enum Num {
 }
 
 impl Num {
-    pub fn to_int(&self) -> u8 {
+    pub fn to_int(self) -> u8 {
         match self {
             Num::One   => 1,
             Num::Two   => 2,
