@@ -1,7 +1,7 @@
 use std::error;
 use std::fmt;
 
-use crate::error_invalid_puzzle::InvalidPuzzle;
+use crate::error::InvalidPuzzle;
 
 #[derive(Debug, Clone)]
 pub struct ImportError;

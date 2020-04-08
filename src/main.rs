@@ -1,11 +1,8 @@
 mod board;
-mod error_import;
-mod error_invalid_puzzle;
+mod error;
 mod importer;
-mod importer_sdk;
 mod num;
 mod strategy;
-mod strategy_sweep_tile;
 mod test_utils;
 mod tile;
 
@@ -14,10 +11,9 @@ use std::path::Path;
 use std::fs::File;
 use std::process::exit;
 
-use crate::importer::Importer;
-use crate::importer_sdk::SDKImporter;
-use crate::strategy::Strategy;
-use crate::strategy_sweep_tile::SweepTileStrategy;
+use crate::error::ImportError;
+use crate::importer::{Importer, SDKImporter};
+use crate::strategy::{Strategy, SweepTileStrategy};
 
 fn main() {
 
@@ -37,7 +33,7 @@ fn main() {
     if let Some(solve_matches) = matches.subcommand_matches("solve") {
         if let Err(e) = solve(solve_matches) {
             match e {
-                error_import::ImportError => println!("Couldn't import puzzle"),
+                ImportError => println!("Couldn't import puzzle"),
             }
             exit(1);
         }
@@ -45,7 +41,7 @@ fn main() {
     }
 }
 
-fn solve(matches: &ArgMatches) -> Result<(), error_import::ImportError> {
+fn solve(matches: &ArgMatches) -> Result<(), ImportError> {
     let filename = matches.value_of("input").unwrap();
     let path = Path::new(filename);
     let mut file = File::open(&path)?;

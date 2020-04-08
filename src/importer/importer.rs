@@ -1,5 +1,5 @@
 use crate::board::Board;
-use crate::error_import::*;
+use crate::error::ImportError;
 
 use std::io::Read;
 
