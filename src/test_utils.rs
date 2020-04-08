@@ -2,9 +2,9 @@ use std::path::Path;
 use std::fs::File;
 
 use crate::board::Board;
-use crate::error_import::ImportError;
+use crate::error::ImportError;
 use crate::importer::Importer;
-use crate::importer_sdk::SDKImporter;
+use crate::importer::SDKImporter;
 
 #[allow(dead_code)]
 pub fn get_test(test: &str) -> Result<Board, ImportError> {

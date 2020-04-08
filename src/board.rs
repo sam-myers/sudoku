@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::error_invalid_puzzle::InvalidPuzzle;
+use crate::error::InvalidPuzzle;
 use crate::tile::Tile;
 use crate::num::Num;
 
