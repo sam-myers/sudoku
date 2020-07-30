@@ -1,4 +1,4 @@
-name: Runs on everthing
+name: Runs on close
 
 # This will run when a PR is closed for any reason
 # note that there are no path filters here; it is possible that
@@ -6,20 +6,7 @@ name: Runs on everthing
 on:
   pull_request:
     types:
-      - assigned
-      - unassigned
-      - labeled
-      - unlabeled
-      - opened
-      - edited
       - closed
-      - reopened
-      - synchronize
-      - ready_for_review
-      - locked
-      - unlocked
-      - review_requested
-      - review_request_removed
 
 jobs:
   announce:
