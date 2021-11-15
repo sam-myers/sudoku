@@ -7,7 +7,7 @@ use crate::error::InvalidPuzzle;
 pub enum ImportError {
     Corruption,
     FileAccess,
-    InvalidPuzzle
+    InvalidPuzzle,
 }
 
 impl fmt::Display for ImportError {

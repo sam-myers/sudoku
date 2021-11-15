@@ -13,11 +13,15 @@ impl Importer for SDKImporter {
         let mut bytes: Vec<u8> = Vec::with_capacity(91);
         reader.read_to_end(&mut bytes)?;
 
-        let tiles: Vec<char> = bytes.iter().map(|b| *b as char).filter(|b| match b {
-            '1'..='9'  => true,
-            '.'        => true,
-            _          => false
-        }).collect();
+        let tiles: Vec<char> = bytes
+            .iter()
+            .map(|b| *b as char)
+            .filter(|b| match b {
+                '1'..='9' => true,
+                '.' => true,
+                _ => false,
+            })
+            .collect();
 
         let mut board = Board::new();
 
@@ -26,7 +30,7 @@ impl Importer for SDKImporter {
             for y in 0..9 {
                 let tile = tiles.get(index);
                 if tile.is_none() {
-                    return Err(ImportError::Corruption)
+                    return Err(ImportError::Corruption);
                 }
                 match *tile.unwrap() as char {
                     '1' => board = board.given(x, y, Num::One)?,
@@ -39,7 +43,7 @@ impl Importer for SDKImporter {
                     '8' => board = board.given(x, y, Num::Eight)?,
                     '9' => board = board.given(x, y, Num::Nine)?,
                     '.' => (),
-                    _   => return Err(ImportError::Corruption), // Should have been already filtered
+                    _ => return Err(ImportError::Corruption), // Should have been already filtered
                 }
                 index += 1;
             }

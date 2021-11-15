@@ -22,14 +22,15 @@ impl SweepTileStrategy {
             let grid_y: usize = y / 3;
             for i in 0..3 {
                 for j in 0..3 {
-                    let check_x = grid_x*3 + i;
-                    let check_y = grid_y*3 + j;
+                    let check_x = grid_x * 3 + i;
+                    let check_y = grid_y * 3 + j;
 
                     if check_x == x && check_y == y {
                         continue;
                     }
 
-                    board.grid[check_x][check_y] = board.grid[check_x][check_y].remove_possibility(num);
+                    board.grid[check_x][check_y] =
+                        board.grid[check_x][check_y].remove_possibility(num);
                 }
             }
         }
@@ -59,18 +60,20 @@ mod tests {
     fn test_single_tile() {
         let mut b = get_test("single_tile").unwrap();
         b = SweepTileStrategy.sweep_tile(b, 0, 0);
-        assert_eq!(b.grid[0][1], Tile::Possibilities([
-            false, true, true, true, true, true, true, true, true,
-        ]))
+        assert_eq!(
+            b.grid[0][1],
+            Tile::Possibilities([false, true, true, true, true, true, true, true, true,])
+        )
     }
 
     #[test]
     fn test_seven_vertical() {
         let mut b = get_test("vertical_7").unwrap();
         b = SweepTileStrategy.round(b);
-        assert_eq!(b.grid[0][8], Tile::Possibilities([
-            false, false, false, false, false, false, false, true, true,
-        ]))
+        assert_eq!(
+            b.grid[0][8],
+            Tile::Possibilities([false, false, false, false, false, false, false, true, true,])
+        )
     }
 
     #[test]
