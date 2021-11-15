@@ -27,17 +27,17 @@ impl Tile {
 
     fn reconcile(self) -> Tile {
         match self {
-            Possibilities([true, false, false, false, false, false, false, false, false]) => Tile::Known(Num::One),
-            Possibilities([false, true, false, false, false, false, false, false, false]) => Tile::Known(Num::Two),
-            Possibilities([false, false, true, false, false, false, false, false, false]) => Tile::Known(Num::Three),
+            Possibilities([true, false, false, false, false, false, false, false, false]) => Tile::Known(Num::new(1)),
+            Possibilities([false, true, false, false, false, false, false, false, false]) => Tile::Known(Num::new(2)),
+            Possibilities([false, false, true, false, false, false, false, false, false]) => Tile::Known(Num::new(3)),
 
-            Possibilities([false, false, false, true, false, false, false, false, false]) => Tile::Known(Num::Four),
-            Possibilities([false, false, false, false, true, false, false, false, false]) => Tile::Known(Num::Five),
-            Possibilities([false, false, false, false, false, true, false, false, false]) => Tile::Known(Num::Six),
+            Possibilities([false, false, false, true, false, false, false, false, false]) => Tile::Known(Num::new(4)),
+            Possibilities([false, false, false, false, true, false, false, false, false]) => Tile::Known(Num::new(5)),
+            Possibilities([false, false, false, false, false, true, false, false, false]) => Tile::Known(Num::new(6)),
 
-            Possibilities([false, false, false, false, false, false, true, false, false]) => Tile::Known(Num::Seven),
-            Possibilities([false, false, false, false, false, false, false, true, false]) => Tile::Known(Num::Eight),
-            Possibilities([false, false, false, false, false, false, false, false, true]) => Tile::Known(Num::Nine),
+            Possibilities([false, false, false, false, false, false, true, false, false]) => Tile::Known(Num::new(7)),
+            Possibilities([false, false, false, false, false, false, false, true, false]) => Tile::Known(Num::new(8)),
+            Possibilities([false, false, false, false, false, false, false, false, true]) => Tile::Known(Num::new(9)),
 
             Possibilities([false, false, false, false, false, false, false, false, false]) => { unreachable!() },
             Possibilities(arr) => Tile::Possibilities(arr),
