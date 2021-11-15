@@ -1,7 +1,7 @@
 use crate::board::Board;
+use crate::digit::Digit;
 use crate::error::ImportError;
 use crate::importer::Importer;
-use crate::num::Num;
 
 use std::io::Read;
 use std::vec::Vec;
@@ -33,15 +33,15 @@ impl Importer for SDKImporter {
                     return Err(ImportError::Corruption);
                 }
                 match *tile.unwrap() as char {
-                    '1' => board = board.given(x, y, Num::One)?,
-                    '2' => board = board.given(x, y, Num::Two)?,
-                    '3' => board = board.given(x, y, Num::Three)?,
-                    '4' => board = board.given(x, y, Num::Four)?,
-                    '5' => board = board.given(x, y, Num::Five)?,
-                    '6' => board = board.given(x, y, Num::Six)?,
-                    '7' => board = board.given(x, y, Num::Seven)?,
-                    '8' => board = board.given(x, y, Num::Eight)?,
-                    '9' => board = board.given(x, y, Num::Nine)?,
+                    '1' => board = board.given(x, y, Digit::new(1))?,
+                    '2' => board = board.given(x, y, Digit::new(2))?,
+                    '3' => board = board.given(x, y, Digit::new(3))?,
+                    '4' => board = board.given(x, y, Digit::new(4))?,
+                    '5' => board = board.given(x, y, Digit::new(5))?,
+                    '6' => board = board.given(x, y, Digit::new(6))?,
+                    '7' => board = board.given(x, y, Digit::new(7))?,
+                    '8' => board = board.given(x, y, Digit::new(8))?,
+                    '9' => board = board.given(x, y, Digit::new(9))?,
                     '.' => (),
                     _ => return Err(ImportError::Corruption), // Should have been already filtered
                 }

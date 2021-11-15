@@ -1,7 +1,7 @@
 use std::fmt;
 
+use crate::digit::Digit;
 use crate::error::InvalidPuzzle;
-use crate::num::Num;
 use crate::tile::Tile;
 
 pub struct Board {
@@ -25,7 +25,7 @@ impl Board {
         }
     }
 
-    pub fn given(mut self, x: usize, y: usize, num: Num) -> Result<Self, InvalidPuzzle> {
+    pub fn given(mut self, x: usize, y: usize, num: Digit) -> Result<Self, InvalidPuzzle> {
         let tile = Tile::Known(num);
 
         for i in 0..9 {

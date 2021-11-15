@@ -1,11 +1,11 @@
 use std::fmt;
 
-use crate::num::Num;
+use crate::digit::Digit;
 use crate::tile::Tile::{Known, Possibilities};
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum Tile {
-    Known(Num),
+    Known(Digit),
     Possibilities([bool; 9]),
 }
 
@@ -14,7 +14,7 @@ impl Tile {
         Tile::Possibilities([true, true, true, true, true, true, true, true, true])
     }
 
-    pub fn remove_possibility(self, num: Num) -> Tile {
+    pub fn remove_possibility(self, num: Digit) -> Tile {
         let t = match self {
             Possibilities(mut arr) => {
                 arr[(num.to_int() - 1) as usize] = false;
@@ -28,33 +28,33 @@ impl Tile {
     fn reconcile(self) -> Tile {
         match self {
             Possibilities([true, false, false, false, false, false, false, false, false]) => {
-                Tile::Known(Num::new(1))
+                Tile::Known(Digit::new(1))
             }
             Possibilities([false, true, false, false, false, false, false, false, false]) => {
-                Tile::Known(Num::new(2))
+                Tile::Known(Digit::new(2))
             }
             Possibilities([false, false, true, false, false, false, false, false, false]) => {
-                Tile::Known(Num::new(3))
+                Tile::Known(Digit::new(3))
             }
 
             Possibilities([false, false, false, true, false, false, false, false, false]) => {
-                Tile::Known(Num::new(4))
+                Tile::Known(Digit::new(4))
             }
             Possibilities([false, false, false, false, true, false, false, false, false]) => {
-                Tile::Known(Num::new(5))
+                Tile::Known(Digit::new(5))
             }
             Possibilities([false, false, false, false, false, true, false, false, false]) => {
-                Tile::Known(Num::new(6))
+                Tile::Known(Digit::new(6))
             }
 
             Possibilities([false, false, false, false, false, false, true, false, false]) => {
-                Tile::Known(Num::new(7))
+                Tile::Known(Digit::new(7))
             }
             Possibilities([false, false, false, false, false, false, false, true, false]) => {
-                Tile::Known(Num::new(8))
+                Tile::Known(Digit::new(8))
             }
             Possibilities([false, false, false, false, false, false, false, false, true]) => {
-                Tile::Known(Num::new(9))
+                Tile::Known(Digit::new(9))
             }
 
             Possibilities([false, false, false, false, false, false, false, false, false]) => {
@@ -66,7 +66,7 @@ impl Tile {
     }
 
     #[allow(dead_code)]
-    pub fn num(&self) -> Option<Num> {
+    pub fn num(&self) -> Option<Digit> {
         if let Tile::Known(n) = self {
             return Some(*n);
         }

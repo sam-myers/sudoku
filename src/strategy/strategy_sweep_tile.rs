@@ -52,7 +52,7 @@ impl Strategy for SweepTileStrategy {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::num::Num;
+    use crate::digit::Digit;
     use crate::test_utils::get_test;
     use crate::tile::Tile;
 
@@ -80,6 +80,6 @@ mod tests {
     fn test_eight_vertical() {
         let mut b = get_test("vertical_8").unwrap();
         b = SweepTileStrategy.round(b);
-        assert_eq!(b.get(0, 8), &Tile::Known(Num::Nine))
+        assert_eq!(b.get(0, 8), &Tile::Known(Digit::new(9)))
     }
 }

@@ -1,7 +1,7 @@
 mod board;
+mod digit;
 mod error;
 mod importer;
-mod num;
 mod strategy;
 mod test_utils;
 mod tile;

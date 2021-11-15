@@ -1,10 +1,9 @@
 use ::std::num::NonZeroU8;
-use std::convert::TryInto;
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-pub struct Num(NonZeroU8);
+pub struct Digit(NonZeroU8);
 
-impl Num {
+impl Digit {
     /// Construct a new `Num`.
     ///
     /// # Panics
@@ -18,7 +17,7 @@ impl Num {
         if digit < 1 || digit > 9 {
             return None;
         }
-        NonZeroU8::new(digit).map(Num)
+        NonZeroU8::new(digit).map(Digit)
     }
 
     pub fn to_int(self) -> u8 {
@@ -26,7 +25,7 @@ impl Num {
     }
 
     #[allow(dead_code)]
-    pub fn from_int(i: u8) -> Option<Num> {
-        Num::from_unverified(i)
+    pub fn from_int(i: u8) -> Option<Digit> {
+        Digit::from_unverified(i)
     }
 }
