@@ -77,7 +77,7 @@ impl Tile {
 impl fmt::Display for Tile {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Known(n) => write!(f, "{}", n.to_int()),
+            Known(n) => write!(f, "{}", n),
             Possibilities(_) => write!(f, " "),
         }
     }

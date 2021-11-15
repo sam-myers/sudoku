@@ -1,4 +1,5 @@
 use ::std::num::NonZeroU8;
+use std::fmt;
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Digit(NonZeroU8);
@@ -27,5 +28,28 @@ impl Digit {
     #[allow(dead_code)]
     pub fn from_int(i: u8) -> Option<Digit> {
         Digit::from_unverified(i)
+    }
+}
+
+impl fmt::Display for Digit {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.0.get())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::digit::Digit;
+
+    #[test]
+    fn test_valid_digits() {
+        for i in 1..10 {
+            Digit::new(i);
+        }
+    }
+
+    #[test]
+    fn test_display() {
+        assert_eq!(format!("{}", Digit::new(1)), "1");
     }
 }
