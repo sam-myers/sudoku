@@ -15,7 +15,7 @@ impl Digit {
 
     /// Construct a new `Num`.
     pub fn from_unverified(digit: u8) -> Option<Self> {
-        if digit < 1 || digit > 9 {
+        if !(1..=9).contains(&digit) {
             return None;
         }
         NonZeroU8::new(digit).map(Digit)
@@ -43,7 +43,7 @@ mod tests {
 
     #[test]
     fn test_valid_digits() {
-        for i in 1..10 {
+        for i in 1..=9 {
             Digit::new(i);
         }
     }
