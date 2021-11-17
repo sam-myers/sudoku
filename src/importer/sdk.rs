@@ -10,18 +10,20 @@ pub struct SDKImporter;
 
 impl Importer for SDKImporter {
     fn parse<R: Read>(&self, reader: &mut R) -> Result<Board, ImportError> {
-        let mut bytes: Vec<u8> = Vec::with_capacity(91);
+        let mut bytes: Vec<u8> = Vec::with_capacity(81);
         reader.read_to_end(&mut bytes)?;
 
+        // Read the puzzle and filter out everything except puzzle characters
         let tiles: Vec<char> = bytes
             .iter()
             .map(|b| *b as char)
-            .filter(|b| match b {
-                '1'..='9' => true,
-                '.' => true,
-                _ => false,
-            })
+            .filter(|b| matches!(b, '1'..='9' | '.'))
             .collect();
+
+        // Sanity check number of elements in a valid puzzle
+        if tiles.len() != 81 {
+            return Err(ImportError::Corruption);
+        }
 
         let mut board = Board::new();
 
@@ -49,11 +51,7 @@ impl Importer for SDKImporter {
             }
         }
 
-        if index == 81 {
-            Ok(board)
-        } else {
-            Err(ImportError::Corruption)
-        }
+        Ok(board)
     }
 }
 
