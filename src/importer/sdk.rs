@@ -30,22 +30,22 @@ impl Importer for SDKImporter {
         let mut index = 0;
         for x in 0..9 {
             for y in 0..9 {
-                let tile = tiles.get(index);
-                if tile.is_none() {
+                if let Some(tile) = tiles.get(index) {
+                    match *tile as char {
+                        '1' => board = board.given(x, y, Digit::new(1))?,
+                        '2' => board = board.given(x, y, Digit::new(2))?,
+                        '3' => board = board.given(x, y, Digit::new(3))?,
+                        '4' => board = board.given(x, y, Digit::new(4))?,
+                        '5' => board = board.given(x, y, Digit::new(5))?,
+                        '6' => board = board.given(x, y, Digit::new(6))?,
+                        '7' => board = board.given(x, y, Digit::new(7))?,
+                        '8' => board = board.given(x, y, Digit::new(8))?,
+                        '9' => board = board.given(x, y, Digit::new(9))?,
+                        '.' => (),
+                        _ => return Err(ImportError::Corruption), // Should have been already filtered
+                    }
+                } else {
                     return Err(ImportError::Corruption);
-                }
-                match *tile.unwrap() as char {
-                    '1' => board = board.given(x, y, Digit::new(1))?,
-                    '2' => board = board.given(x, y, Digit::new(2))?,
-                    '3' => board = board.given(x, y, Digit::new(3))?,
-                    '4' => board = board.given(x, y, Digit::new(4))?,
-                    '5' => board = board.given(x, y, Digit::new(5))?,
-                    '6' => board = board.given(x, y, Digit::new(6))?,
-                    '7' => board = board.given(x, y, Digit::new(7))?,
-                    '8' => board = board.given(x, y, Digit::new(8))?,
-                    '9' => board = board.given(x, y, Digit::new(9))?,
-                    '.' => (),
-                    _ => return Err(ImportError::Corruption), // Should have been already filtered
                 }
                 index += 1;
             }
