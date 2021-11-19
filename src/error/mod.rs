@@ -1,5 +1,15 @@
-mod import;
-mod invalid_puzzle;
+use thiserror::Error;
 
-pub use import::ImportError;
-pub use invalid_puzzle::InvalidPuzzle;
+pub type Result<T> = std::result::Result<T, SudokuError>;
+
+#[derive(Error, Debug)]
+pub enum SudokuError {
+    #[error("Cannot read file {0}")]
+    FileRead(String),
+
+    #[error("Malformed file")]
+    MalformedFile,
+
+    #[error("Invalid puzzle")]
+    InvalidPuzzle,
+}
