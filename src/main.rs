@@ -1,11 +1,10 @@
 mod board;
 mod digit;
 mod error;
+mod helpers;
 mod importer;
 mod strategy;
-mod test_utils;
 mod tile;
-mod helpers;
 
 use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
 use std::process::exit;

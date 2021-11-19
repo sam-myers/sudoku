@@ -11,7 +11,9 @@ pub struct SDKImporter;
 impl Importer for SDKImporter {
     fn parse<R: Read>(&self, reader: &mut R) -> Result<Board> {
         let mut bytes: Vec<u8> = Vec::with_capacity(81);
-        reader.read_to_end(&mut bytes).map_err(|_| SudokuError::MalformedFile)?;
+        reader
+            .read_to_end(&mut bytes)
+            .map_err(|_| SudokuError::MalformedFile)?;
 
         // Read the puzzle and filter out everything except puzzle characters
         let tiles: Vec<char> = bytes
@@ -57,7 +59,7 @@ impl Importer for SDKImporter {
 
 #[cfg(test)]
 mod tests {
-    use crate::test_utils::get_test;
+    use crate::helpers::get_test;
 
     #[test]
     fn test_corrupt_1() {

@@ -200,7 +200,7 @@ impl fmt::Display for Board {
 #[cfg(test)]
 mod tests {
     use crate::error::SudokuError;
-    use crate::test_utils::get_test;
+    use crate::helpers::get_test;
 
     #[test]
     fn test_valid_1() {

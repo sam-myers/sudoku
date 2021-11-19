@@ -53,7 +53,7 @@ impl Strategy for SweepTileStrategy {
 mod tests {
     use super::*;
     use crate::digit::Digit;
-    use crate::test_utils::get_test;
+    use crate::helpers::get_test;
     use crate::tile::Tile;
 
     #[test]
