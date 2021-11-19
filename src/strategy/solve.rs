@@ -7,8 +7,7 @@ pub fn solve(mut board: Board) -> Result<Board> {
     let mut pre_round_board: Board;
 
     while !board.is_done() {
-        pre_round_board = board.clone();
-
+        pre_round_board = board;
         board = SweepTileStrategy.round(board);
 
         if pre_round_board == board {
