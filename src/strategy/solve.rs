@@ -1,5 +1,5 @@
-use crate::error::{Result, SudokuError};
 use crate::board::Board;
+use crate::error::{Result, SudokuError};
 use crate::strategy::Strategy;
 use crate::SweepTileStrategy;
 
@@ -21,8 +21,8 @@ pub fn solve(mut board: Board) -> Result<Board> {
 #[cfg(test)]
 mod tests {
     use crate::error::SudokuError;
-    use crate::strategy::solve;
     use crate::helpers::get_test;
+    use crate::strategy::solve;
 
     #[test]
     fn test_solvable_puzzle() {
