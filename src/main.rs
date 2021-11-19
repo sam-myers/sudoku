@@ -5,13 +5,13 @@ mod importer;
 mod strategy;
 mod test_utils;
 mod tile;
+mod helpers;
 
 use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
-use std::fs::File;
-use std::path::Path;
 use std::process::exit;
 
-use crate::error::ImportError;
+use crate::error::Result;
+use crate::helpers::open_file;
 use crate::importer::{Importer, SDKImporter};
 use crate::strategy::{Strategy, SweepTileStrategy};
 
@@ -33,23 +33,24 @@ fn main() {
 
     if let Some(solve_matches) = matches.subcommand_matches("solve") {
         if let Err(e) = solve(solve_matches) {
-            println!("{}", e.to_string());
+            println!("Error: {}", e.to_string());
             exit(1);
         }
         exit(0);
     }
 }
 
-fn solve(matches: &ArgMatches) -> Result<(), ImportError> {
+fn solve(matches: &ArgMatches) -> Result<()> {
     let filename = matches.value_of("input").unwrap();
-    let path = Path::new(filename);
-    let mut file = File::open(&path)?;
+    let mut file = open_file(filename)?;
     let mut b = SDKImporter.parse(&mut file)?;
 
+    println!("Solving puzzle");
     println!("{}", b);
     while !b.is_done() {
         b = SweepTileStrategy.round(b);
     }
+    println!("Solved puzzle");
     println!("{}", b);
     Ok(())
 }

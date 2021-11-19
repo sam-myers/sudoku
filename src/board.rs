@@ -1,7 +1,7 @@
 use std::fmt;
 
 use crate::digit::Digit;
-use crate::error::InvalidPuzzle;
+use crate::error::{Result, SudokuError};
 use crate::tile::Tile;
 
 pub struct Board {
@@ -25,18 +25,18 @@ impl Board {
         }
     }
 
-    pub fn given(mut self, x: usize, y: usize, num: Digit) -> Result<Self, InvalidPuzzle> {
+    pub fn given(mut self, x: usize, y: usize, num: Digit) -> Result<Self> {
         let tile = Tile::Known(num);
 
         for i in 0..9 {
             // Horizontal
             if self.grid[i][y] == tile {
-                return Err(InvalidPuzzle);
+                return Err(SudokuError::InvalidPuzzle);
             }
 
             // Vertical
             if self.grid[x][i] == tile {
-                return Err(InvalidPuzzle);
+                return Err(SudokuError::InvalidPuzzle);
             }
         }
 
@@ -54,7 +54,7 @@ impl Board {
 
                 // Grid
                 if self.grid[check_x][check_y] == tile {
-                    return Err(InvalidPuzzle);
+                    return Err(SudokuError::InvalidPuzzle);
                 }
             }
         }
@@ -199,7 +199,7 @@ impl fmt::Display for Board {
 
 #[cfg(test)]
 mod tests {
-    use crate::error::ImportError;
+    use crate::error::SudokuError;
     use crate::test_utils::get_test;
 
     #[test]
@@ -221,7 +221,7 @@ mod tests {
     fn test_invalid_1() {
         let b = get_test("invalid_1");
         match b {
-            Err(ImportError::InvalidPuzzle) => (),
+            Err(SudokuError::InvalidPuzzle) => (),
             _ => panic!(),
         }
     }
@@ -230,7 +230,7 @@ mod tests {
     fn test_invalid_2() {
         let b = get_test("invalid_2");
         match b {
-            Err(ImportError::InvalidPuzzle) => (),
+            Err(SudokuError::InvalidPuzzle) => (),
             _ => panic!(),
         }
     }
@@ -239,7 +239,7 @@ mod tests {
     fn test_invalid_3() {
         let b = get_test("invalid_3");
         match b {
-            Err(ImportError::InvalidPuzzle) => (),
+            Err(SudokuError::InvalidPuzzle) => (),
             _ => panic!(),
         }
     }
