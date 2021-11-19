@@ -12,7 +12,7 @@ use std::process::exit;
 use crate::error::Result;
 use crate::helpers::open_file;
 use crate::importer::{Importer, SDKImporter};
-use crate::strategy::{Strategy, SweepTileStrategy};
+use crate::strategy::{solve, SweepTileStrategy};
 
 fn main() {
     let matches = App::new("sudoku")
@@ -31,7 +31,7 @@ fn main() {
         .get_matches();
 
     if let Some(solve_matches) = matches.subcommand_matches("solve") {
-        if let Err(e) = solve(solve_matches) {
+        if let Err(e) = solve_command(solve_matches) {
             println!("Error: {}", e.to_string());
             exit(1);
         }
@@ -39,17 +39,17 @@ fn main() {
     }
 }
 
-fn solve(matches: &ArgMatches) -> Result<()> {
+fn solve_command(matches: &ArgMatches) -> Result<()> {
     let filename = matches.value_of("input").unwrap();
     let mut file = open_file(filename)?;
-    let mut b = SDKImporter.parse(&mut file)?;
+    let mut board = SDKImporter.parse(&mut file)?;
 
     println!("Solving puzzle");
-    println!("{}", b);
-    while !b.is_done() {
-        b = SweepTileStrategy.round(b);
-    }
+    println!("{}", board);
+
+    board = solve(board)?;
+
     println!("Solved puzzle");
-    println!("{}", b);
+    println!("{}", board);
     Ok(())
 }
