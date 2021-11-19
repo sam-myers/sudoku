@@ -41,19 +41,19 @@ impl Board {
             }
         }
 
-        let grid_x: usize = x / 3;
-        let grid_y: usize = y / 3;
+        let house_x: usize = x / 3;
+        let house_y: usize = y / 3;
 
         for i in 0..3 {
             for j in 0..3 {
-                let check_x = grid_x * 3 + i;
-                let check_y = grid_y * 3 + j;
+                let check_x = house_x * 3 + i;
+                let check_y = house_y * 3 + j;
 
                 if check_x == x && check_y == y {
                     continue;
                 }
 
-                // Grid
+                // House
                 if self.grid[check_x][check_y] == tile {
                     return Err(SudokuError::InvalidPuzzle);
                 }
