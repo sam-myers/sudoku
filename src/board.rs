@@ -4,6 +4,7 @@ use crate::digit::Digit;
 use crate::error::{Result, SudokuError};
 use crate::tile::Tile;
 
+#[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Board {
     pub grid: [[Tile; 9]; 9],
 }
@@ -220,27 +221,18 @@ mod tests {
     #[test]
     fn test_invalid_1() {
         let b = get_test("invalid_1");
-        match b {
-            Err(SudokuError::InvalidPuzzle) => (),
-            _ => panic!(),
-        }
+        assert!(matches!(b, Err(SudokuError::InvalidPuzzle)));
     }
 
     #[test]
     fn test_invalid_2() {
         let b = get_test("invalid_2");
-        match b {
-            Err(SudokuError::InvalidPuzzle) => (),
-            _ => panic!(),
-        }
+        assert!(matches!(b, Err(SudokuError::InvalidPuzzle)));
     }
 
     #[test]
     fn test_invalid_3() {
         let b = get_test("invalid_3");
-        match b {
-            Err(SudokuError::InvalidPuzzle) => (),
-            _ => panic!(),
-        }
+        assert!(matches!(b, Err(SudokuError::InvalidPuzzle)));
     }
 }

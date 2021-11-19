@@ -12,4 +12,7 @@ pub enum SudokuError {
 
     #[error("Invalid puzzle")]
     InvalidPuzzle,
+
+    #[error("Could not solve puzzle")]
+    UnsolvablePuzzle,
 }
