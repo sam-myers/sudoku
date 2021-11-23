@@ -27,40 +27,18 @@ impl Tile {
 
     fn reconcile(self) -> Tile {
         match self {
-            Possibilities([true, false, false, false, false, false, false, false, false]) => {
-                Tile::Known(Digit::new(1))
-            }
-            Possibilities([false, true, false, false, false, false, false, false, false]) => {
-                Tile::Known(Digit::new(2))
-            }
-            Possibilities([false, false, true, false, false, false, false, false, false]) => {
-                Tile::Known(Digit::new(3))
-            }
-
-            Possibilities([false, false, false, true, false, false, false, false, false]) => {
-                Tile::Known(Digit::new(4))
-            }
-            Possibilities([false, false, false, false, true, false, false, false, false]) => {
-                Tile::Known(Digit::new(5))
-            }
-            Possibilities([false, false, false, false, false, true, false, false, false]) => {
-                Tile::Known(Digit::new(6))
-            }
-
-            Possibilities([false, false, false, false, false, false, true, false, false]) => {
-                Tile::Known(Digit::new(7))
-            }
-            Possibilities([false, false, false, false, false, false, false, true, false]) => {
-                Tile::Known(Digit::new(8))
-            }
-            Possibilities([false, false, false, false, false, false, false, false, true]) => {
-                Tile::Known(Digit::new(9))
-            }
-
-            Possibilities([false, false, false, false, false, false, false, false, false]) => {
-                unreachable!()
-            }
-            Possibilities(arr) => Tile::Possibilities(arr),
+            Possibilities(arr) => {
+                let only_one = arr.iter().filter(|p| { **p }).nth(1).is_none();
+                match only_one {
+                    true => arr.iter().enumerate().filter_map(|(i, possible)| {
+                        match *possible {
+                            true => Some(Tile::Known(Digit::new(i as u8 + 1))),
+                            false => None,
+                        }
+                    }).next().unwrap(),
+                    false => Tile::Possibilities(arr),
+                }
+            },
             Known(_) => self,
         }
     }
