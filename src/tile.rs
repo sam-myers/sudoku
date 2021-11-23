@@ -28,17 +28,20 @@ impl Tile {
     fn reconcile(self) -> Tile {
         match self {
             Possibilities(arr) => {
-                let only_one = arr.iter().filter(|p| { **p }).nth(1).is_none();
+                let only_one = arr.iter().filter(|p| **p).nth(1).is_none();
                 match only_one {
-                    true => arr.iter().enumerate().filter_map(|(i, possible)| {
-                        match *possible {
+                    true => arr
+                        .iter()
+                        .enumerate()
+                        .filter_map(|(i, possible)| match *possible {
                             true => Some(Tile::Known(Digit::new(i as u8 + 1))),
                             false => None,
-                        }
-                    }).next().unwrap(),
+                        })
+                        .next()
+                        .unwrap(),
                     false => Tile::Possibilities(arr),
                 }
-            },
+            }
             Known(_) => self,
         }
     }
