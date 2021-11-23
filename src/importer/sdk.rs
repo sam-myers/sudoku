@@ -44,7 +44,7 @@ impl Importer for SDKImporter {
                         '8' => board = board.given(x, y, Digit::new(8))?,
                         '9' => board = board.given(x, y, Digit::new(9))?,
                         '.' => (),
-                        _ => return Err(SudokuError::MalformedFile), // Should have been already filtered
+                        _ => unreachable!(),
                     }
                 } else {
                     return Err(SudokuError::MalformedFile);
