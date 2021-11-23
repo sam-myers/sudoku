@@ -5,6 +5,7 @@ mod helpers;
 mod importer;
 mod strategy;
 mod tile;
+mod tile_group;
 
 use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
 use std::process::exit;
