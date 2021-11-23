@@ -3,6 +3,7 @@ use std::fmt;
 use crate::digit::Digit;
 use crate::error::{Result, SudokuError};
 use crate::tile::Tile;
+use crate::tile_group::{TileGroup, TileGroupLocation};
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Board {
@@ -73,6 +74,42 @@ impl Board {
             }
         }
         true
+    }
+
+    pub fn get_tile_group(&self, location: TileGroupLocation) -> TileGroup {
+        let mut tiles: [Tile; 9] = [Tile::Known(Digit::new(1)); 9];
+        match location {
+            TileGroupLocation::Column(col) => {
+                for x in 0..9 {
+                    tiles[x] = self.grid[x][col as usize];
+                }
+                TileGroup::new(location, tiles).unwrap()
+            }
+            TileGroupLocation::Row(row) => {
+                for y in 0..9 {
+                    tiles[y] = self.grid[row as usize][y];
+                }
+                TileGroup::new(location, tiles).unwrap()
+            }
+            TileGroupLocation::House(_, _) => unimplemented!(),
+        }
+    }
+
+    pub fn save_tile_group(mut self, group: TileGroup) -> Self {
+        match group.location {
+            TileGroupLocation::Column(col) => {
+                for x in 0..9 {
+                    self.grid[x][col as usize] = group.tiles[x];
+                }
+            }
+            TileGroupLocation::Row(row) => {
+                for y in 0..9 {
+                    self.grid[row as usize][y] = group.tiles[y];
+                }
+            }
+            TileGroupLocation::House(_, _) => unimplemented!(),
+        }
+        self
     }
 
     #[allow(dead_code)]
