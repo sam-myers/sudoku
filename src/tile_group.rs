@@ -1,6 +1,6 @@
-use std::fmt;
 use crate::error::Result;
 use crate::tile::Tile;
+use std::fmt;
 
 pub enum TileGroupLocation {
     Row(u8),
@@ -33,25 +33,23 @@ impl TileGroup {
     }
 
     pub(crate) fn to_test_string(&self) -> String {
-        format!("{}{}{}{}{}{}{}{}{}",
-                self.tiles[0].to_test_string(),
-                self.tiles[1].to_test_string(),
-                self.tiles[2].to_test_string(),
-                self.tiles[3].to_test_string(),
-                self.tiles[4].to_test_string(),
-                self.tiles[5].to_test_string(),
-                self.tiles[6].to_test_string(),
-                self.tiles[7].to_test_string(),
-                self.tiles[8].to_test_string())
+        format!(
+            "{}{}{}{}{}{}{}{}{}",
+            self.tiles[0].to_test_string(),
+            self.tiles[1].to_test_string(),
+            self.tiles[2].to_test_string(),
+            self.tiles[3].to_test_string(),
+            self.tiles[4].to_test_string(),
+            self.tiles[5].to_test_string(),
+            self.tiles[6].to_test_string(),
+            self.tiles[7].to_test_string(),
+            self.tiles[8].to_test_string()
+        )
     }
 }
 
 impl fmt::Display for TileGroup {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f,
-               "{}: {}",
-               self.location,
-               self.to_test_string(),
-        )
+        write!(f, "{}: {}", self.location, self.to_test_string(),)
     }
 }
