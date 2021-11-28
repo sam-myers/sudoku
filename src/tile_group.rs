@@ -1,4 +1,5 @@
 use crate::digit::Digit;
+use crate::error::SudokuError::InternalConsistencyError;
 use crate::error::{Result, SudokuError};
 use crate::tile::Tile;
 use std::fmt;
@@ -33,6 +34,7 @@ impl TileGroup {
 
     fn validate(&self) -> Result<()> {
         self.validate_no_two_known()?;
+        self.validate_all_digits_possible()?;
         Ok(())
     }
 
@@ -43,15 +45,43 @@ impl TileGroup {
             .filter_map(|t| (*t).digit())
             .collect::<Vec<Digit>>();
 
-        for d in 1..=9 {
+        for digit in 1..=9 {
             let digits_count = digits
                 .iter()
-                .filter(|digit| (*digit).to_int() == d)
+                .filter(|d| (*d).to_int() == digit)
                 .fold(0, |acc, _| acc + 1);
 
             if digits_count > 1 {
                 return Err(SudokuError::InternalConsistencyError(
                     "Two or more digits in the same group",
+                ));
+            }
+        }
+        Ok(())
+    }
+
+    fn validate_all_digits_possible(&self) -> Result<()> {
+        for digit in 1..=9 {
+            let digit_known = self
+                .tiles
+                .iter()
+                .filter_map(|t| (*t).digit())
+                .any(|d| d.to_int() == digit);
+
+            if digit_known {
+                continue;
+            }
+
+            let tiles_possible = self
+                .tiles
+                .iter()
+                .filter_map(|t| (*t).possibilities())
+                .filter(|p| p[(digit - 1) as usize])
+                .fold(0, |acc, _| acc + 1);
+
+            if tiles_possible < 1 {
+                return Err(InternalConsistencyError(
+                    "All possibilities for digit removed",
                 ));
             }
         }
@@ -143,6 +173,69 @@ mod tests {
         assert!(matches!(
             group.validate(),
             Err(SudokuError::InternalConsistencyError(_)),
+        ))
+    }
+
+    #[test]
+    fn test_validate_possibilities() {
+        let group = TileGroup {
+            location: TileGroupLocation::Column(0),
+            tiles: [
+                Tile::Possibilities([true, false, false, false, false, false, false, false, false]),
+                Tile::Possibilities([true, true, false, false, false, false, false, false, false]),
+                Tile::Possibilities([true, true, true, false, false, false, false, false, false]),
+                Tile::Possibilities([true, true, true, true, false, false, false, false, false]),
+                Tile::Possibilities([true, true, true, true, true, false, false, false, false]),
+                Tile::Possibilities([true, true, true, true, true, true, false, false, false]),
+                Tile::Possibilities([true, true, true, true, true, true, true, false, false]),
+                Tile::Possibilities([true, true, true, true, true, true, true, true, false]),
+                Tile::Possibilities([true, true, true, true, true, true, true, true, true]),
+            ],
+        };
+        assert!(matches!(group.validate(), Ok(())))
+    }
+
+    #[test]
+    fn test_validate_no_possibilities() {
+        let group = TileGroup {
+            location: TileGroupLocation::Column(0),
+            tiles: [
+                Tile::Possibilities([true, true, true, true, true, true, true, true, false]),
+                Tile::Possibilities([true, true, true, true, true, true, true, true, false]),
+                Tile::Possibilities([true, true, true, true, true, true, true, true, false]),
+                Tile::Possibilities([true, true, true, true, true, true, true, true, false]),
+                Tile::Possibilities([true, true, true, true, true, true, true, true, false]),
+                Tile::Possibilities([true, true, true, true, true, true, true, true, false]),
+                Tile::Possibilities([true, true, true, true, true, true, true, true, false]),
+                Tile::Possibilities([true, true, true, true, true, true, true, true, false]),
+                Tile::Possibilities([true, true, true, true, true, true, true, true, false]),
+            ],
+        };
+        assert!(matches!(
+            group.validate(),
+            Err(SudokuError::InternalConsistencyError(_))
+        ))
+    }
+
+    #[test]
+    fn test_validate_no_possibilities_some_known() {
+        let group = TileGroup {
+            location: TileGroupLocation::Column(0),
+            tiles: [
+                Tile::new_known(2),
+                Tile::Possibilities([false, false, true, true, true, true, true, true, true]),
+                Tile::Possibilities([false, false, true, true, true, true, true, true, true]),
+                Tile::Possibilities([false, false, true, true, true, true, true, true, true]),
+                Tile::Possibilities([false, false, true, true, true, true, true, true, true]),
+                Tile::Possibilities([false, false, true, true, true, true, true, true, true]),
+                Tile::Possibilities([false, false, true, true, true, true, true, true, true]),
+                Tile::Possibilities([false, false, true, true, true, true, true, true, true]),
+                Tile::Possibilities([false, false, true, true, true, true, true, true, true]),
+            ],
+        };
+        assert!(matches!(
+            group.validate(),
+            Err(SudokuError::InternalConsistencyError(_))
         ))
     }
 }
