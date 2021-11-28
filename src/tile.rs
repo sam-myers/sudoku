@@ -51,10 +51,16 @@ impl Tile {
         }
     }
 
-    #[allow(dead_code)]
     pub fn digit(&self) -> Option<Digit> {
         if let Tile::Known(n) = self {
             return Some(*n);
+        }
+        None
+    }
+
+    pub fn possibilities(&self) -> Option<[bool; 9]> {
+        if let Tile::Possibilities(p) = self {
+            return Some(*p);
         }
         None
     }
