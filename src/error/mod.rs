@@ -14,7 +14,7 @@ pub enum SudokuError {
     InvalidPuzzle,
 
     #[error("Internal bug")]
-    InternalConsistencyError,
+    InternalConsistencyError(&'static str),
 
     #[error("Could not solve puzzle")]
     UnsolvablePuzzle,

@@ -50,7 +50,9 @@ impl TileGroup {
                 .fold(0, |acc, _| acc + 1);
 
             if digits_count > 1 {
-                return Err(SudokuError::InternalConsistencyError);
+                return Err(SudokuError::InternalConsistencyError(
+                    "Two or more digits in the same group",
+                ));
             }
         }
         Ok(())
@@ -140,7 +142,7 @@ mod tests {
         };
         assert!(matches!(
             group.validate(),
-            Err(SudokuError::InternalConsistencyError),
+            Err(SudokuError::InternalConsistencyError(_)),
         ))
     }
 }
