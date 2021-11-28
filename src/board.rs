@@ -131,6 +131,32 @@ impl Board {
         self
     }
 
+    pub fn apply_strategy(mut self, strategy: fn(TileGroup) -> Result<TileGroup>) -> Result<Self> {
+        // Columns
+        for col in 0..9 {
+            self = self.save_tile_group(strategy(
+                self.get_tile_group(TileGroupLocation::Column(col)),
+            )?);
+        }
+
+        // Rows
+        for row in 0..9 {
+            self =
+                self.save_tile_group(strategy(self.get_tile_group(TileGroupLocation::Row(row)))?);
+        }
+
+        // Houses
+        for x in 0..3 {
+            for y in 0..3 {
+                self = self.save_tile_group(strategy(
+                    self.get_tile_group(TileGroupLocation::House(x, y)),
+                )?);
+            }
+        }
+
+        Ok(self)
+    }
+
     #[allow(dead_code)]
     pub fn get(&self, x: usize, y: usize) -> &Tile {
         &self.grid[x][y]

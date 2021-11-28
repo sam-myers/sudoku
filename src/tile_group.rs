@@ -32,7 +32,7 @@ impl TileGroup {
         Ok(new)
     }
 
-    fn validate(&self) -> Result<()> {
+    pub fn validate(&self) -> Result<()> {
         self.validate_no_two_known()?;
         self.validate_all_digits_possible()?;
         Ok(())
@@ -113,44 +113,19 @@ impl fmt::Display for TileGroup {
 #[cfg(test)]
 mod tests {
     use crate::error::SudokuError;
+    use crate::helpers::new_tile_group;
     use crate::tile::Tile;
     use crate::tile_group::{TileGroup, TileGroupLocation};
 
     #[test]
     fn test_validate_all_unknown() {
-        let group = TileGroup {
-            location: TileGroupLocation::Column(0),
-            tiles: [
-                Tile::new_blank(),
-                Tile::new_blank(),
-                Tile::new_blank(),
-                Tile::new_blank(),
-                Tile::new_blank(),
-                Tile::new_blank(),
-                Tile::new_blank(),
-                Tile::new_blank(),
-                Tile::new_blank(),
-            ],
-        };
+        let group = new_tile_group(".........");
         assert!(matches!(group.validate(), Ok(()),))
     }
 
     #[test]
     fn test_validate_all_known() {
-        let group = TileGroup {
-            location: TileGroupLocation::Column(0),
-            tiles: [
-                Tile::new_known(1),
-                Tile::new_known(2),
-                Tile::new_known(3),
-                Tile::new_known(4),
-                Tile::new_known(5),
-                Tile::new_known(6),
-                Tile::new_known(7),
-                Tile::new_known(8),
-                Tile::new_known(9),
-            ],
-        };
+        let group = new_tile_group("123456789");
         assert!(matches!(group.validate(), Ok(()),))
     }
 
