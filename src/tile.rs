@@ -10,6 +10,10 @@ pub enum Tile {
 }
 
 impl Tile {
+    pub fn new_known(digit: u8) -> Tile {
+        Tile::Known(Digit::new(digit))
+    }
+
     pub fn new_blank() -> Tile {
         Tile::Possibilities([true, true, true, true, true, true, true, true, true])
     }
@@ -52,6 +56,13 @@ impl Tile {
             return Some(*n);
         }
         None
+    }
+
+    pub(crate) fn to_test_string(&self) -> String {
+        match self {
+            Known(n) => format!("{}", n),
+            Possibilities(_) => ".".to_string(),
+        }
     }
 }
 

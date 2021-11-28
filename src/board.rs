@@ -83,16 +83,25 @@ impl Board {
                 for x in 0..9 {
                     tiles[x] = self.grid[x][col as usize];
                 }
-                TileGroup::new(location, tiles).unwrap()
             }
             TileGroupLocation::Row(row) => {
                 for y in 0..9 {
                     tiles[y] = self.grid[row as usize][y];
                 }
-                TileGroup::new(location, tiles).unwrap()
             }
-            TileGroupLocation::House(_, _) => unimplemented!(),
+            TileGroupLocation::House(house_x, house_y) => {
+                let mut index = 0;
+                for x in 0..3 {
+                    for y in 0..3 {
+                        let grid_x: usize = (house_x * 3 + x) as usize;
+                        let grid_y: usize = (house_y * 3 + y) as usize;
+                        tiles[index] = self.grid[grid_x][grid_y];
+                        index += 1;
+                    }
+                }
+            },
         }
+        TileGroup::new(location, tiles).unwrap()
     }
 
     pub fn save_tile_group(mut self, group: TileGroup) -> Self {
@@ -107,7 +116,17 @@ impl Board {
                     self.grid[row as usize][y] = group.tiles[y];
                 }
             }
-            TileGroupLocation::House(_, _) => unimplemented!(),
+            TileGroupLocation::House(house_x, house_y) => {
+                let mut index = 0;
+                for x in 0..3 {
+                    for y in 0..3 {
+                        let grid_x: usize = (house_x * 3 + x) as usize;
+                        let grid_y: usize = (house_y * 3 + y) as usize;
+                        self.grid[grid_x][grid_y] = group.tiles[index];
+                        index += 1;
+                    }
+                }
+            },
         }
         self
     }
@@ -177,7 +196,7 @@ impl fmt::Display for Board {
             &self.grid[2][6],
             &self.grid[2][7],
             &self.grid[2][8],
-            &self.grid[3][3],
+            &self.grid[3][0],
             &self.grid[3][1],
             &self.grid[3][2],
             &self.grid[3][3],
@@ -238,7 +257,9 @@ impl fmt::Display for Board {
 #[cfg(test)]
 mod tests {
     use crate::error::SudokuError;
-    use crate::helpers::get_test;
+    use crate::helpers::{assert_tile_group_equal, get_test};
+    use crate::tile::Tile;
+    use crate::tile_group::{TileGroupLocation};
 
     #[test]
     fn test_valid_1() {
@@ -271,5 +292,83 @@ mod tests {
     fn test_invalid_3() {
         let b = get_test("invalid_3");
         assert!(matches!(b, Err(SudokuError::InvalidPuzzle)));
+    }
+
+    #[test]
+    fn test_get_tile_group_column() {
+        let board = get_test("solvable_1").unwrap();
+        let tile_group = board.get_tile_group(TileGroupLocation::Column(0));
+
+        assert_tile_group_equal(&tile_group, "5.49.23..");
+    }
+
+    #[test]
+    fn test_get_tile_group_row() {
+        let board = get_test("solvable_1").unwrap();
+        let tile_group = board.get_tile_group(TileGroupLocation::Row(1));
+
+        assert_tile_group_equal(&tile_group, ".6273..98");
+    }
+
+    #[test]
+    fn test_get_tile_group_house() {
+        let board = get_test("solvable_1").unwrap();
+        let tile_group = board.get_tile_group(TileGroupLocation::House(0, 0));
+
+        assert_tile_group_equal(&tile_group, "5...624.9");
+    }
+
+    #[test]
+    fn test_save_tile_group_column() {
+        let initial_board = get_test("solvable_1").unwrap();
+        let mut initial_tile_group = initial_board.get_tile_group(TileGroupLocation::Column(0));
+
+        initial_tile_group.tiles[1] = Tile::new_known(1);
+        let updated_board = initial_board.save_tile_group(initial_tile_group);
+
+        let updated_column = updated_board.get_tile_group(TileGroupLocation::Column(0));
+        assert_tile_group_equal(&updated_column, "5149.23..");
+
+        let updated_row = updated_board.get_tile_group(TileGroupLocation::Row(1));
+        assert_tile_group_equal(&updated_row, "16273..98");
+
+        let updated_house = updated_board.get_tile_group(TileGroupLocation::House(0, 0));
+        assert_tile_group_equal(&updated_house, "5..1624.9");
+    }
+
+    #[test]
+    fn test_save_tile_group_row() {
+        let initial_board = get_test("solvable_1").unwrap();
+        let mut initial_tile_group = initial_board.get_tile_group(TileGroupLocation::Row(8));
+
+        initial_tile_group.tiles[7] = Tile::new_known(5);
+        let updated_board = initial_board.save_tile_group(initial_tile_group);
+
+        let updated_column = updated_board.get_tile_group(TileGroupLocation::Column(7));
+        assert_tile_group_equal(&updated_column, "693.1...5");
+
+        let updated_row = updated_board.get_tile_group(TileGroupLocation::Row(8));
+        assert_tile_group_equal(&updated_row, "..1...256");
+
+        let updated_house = updated_board.get_tile_group(TileGroupLocation::House(2, 2));
+        assert_tile_group_equal(&updated_house, "8.....256");
+    }
+
+    #[test]
+    fn test_save_tile_group_house() {
+        let initial_board = get_test("solvable_1").unwrap();
+        let mut initial_tile_group = initial_board.get_tile_group(TileGroupLocation::House(1, 1));
+
+        initial_tile_group.tiles[0] = Tile::new_known(5);
+        let updated_board = initial_board.save_tile_group(initial_tile_group);
+
+        let updated_column = updated_board.get_tile_group(TileGroupLocation::Column(3));
+        assert_tile_group_equal(&updated_column, "276531...");
+
+        let updated_row = updated_board.get_tile_group(TileGroupLocation::Row(3));
+        assert_tile_group_equal(&updated_row, "9..5..4.7");
+
+        let updated_house = updated_board.get_tile_group(TileGroupLocation::House(1, 1));
+        assert_tile_group_equal(&updated_house, "5..34.1..");
     }
 }
