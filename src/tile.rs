@@ -32,9 +32,10 @@ impl Tile {
     fn reconcile(self) -> Tile {
         match self {
             Possibilities(arr) => {
-                let only_one = arr.iter().filter(|p| **p).nth(1).is_none();
-                match only_one {
-                    true => arr
+                let possibilities = arr.iter().filter(|p| **p).fold(0, |acc, _| acc + 1);
+                match possibilities {
+                    0 => unreachable!("Tile with no possibilities"),
+                    1 => arr
                         .iter()
                         .enumerate()
                         .filter_map(|(i, possible)| match *possible {
@@ -43,7 +44,7 @@ impl Tile {
                         })
                         .next()
                         .unwrap(),
-                    false => Tile::Possibilities(arr),
+                    _ => Tile::Possibilities(arr),
                 }
             }
             Known(_) => self,
@@ -51,7 +52,7 @@ impl Tile {
     }
 
     #[allow(dead_code)]
-    pub fn num(&self) -> Option<Digit> {
+    pub fn digit(&self) -> Option<Digit> {
         if let Tile::Known(n) = self {
             return Some(*n);
         }
