@@ -99,7 +99,7 @@ impl Board {
                         index += 1;
                     }
                 }
-            },
+            }
         }
         TileGroup::new(location, tiles).unwrap()
     }
@@ -126,7 +126,7 @@ impl Board {
                         index += 1;
                     }
                 }
-            },
+            }
         }
         self
     }
@@ -259,7 +259,7 @@ mod tests {
     use crate::error::SudokuError;
     use crate::helpers::{assert_tile_group_equal, get_test};
     use crate::tile::Tile;
-    use crate::tile_group::{TileGroupLocation};
+    use crate::tile_group::TileGroupLocation;
 
     #[test]
     fn test_valid_1() {

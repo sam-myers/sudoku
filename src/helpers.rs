@@ -1,12 +1,12 @@
 use crate::board::Board;
+use crate::digit::Digit;
 use crate::error::{Result, SudokuError};
 use crate::importer::importer::Importer;
+use crate::tile::Tile;
+use crate::tile_group::TileGroup;
 use crate::SDKImporter;
 use std::fs::File;
 use std::path::Path;
-use crate::digit::Digit;
-use crate::tile::Tile;
-use crate::tile_group::TileGroup;
 
 pub(crate) fn open_file(filename: &str) -> Result<File> {
     let path = Path::new(filename);
