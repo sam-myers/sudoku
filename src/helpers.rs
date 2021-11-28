@@ -3,7 +3,7 @@ use crate::digit::Digit;
 use crate::error::{Result, SudokuError};
 use crate::importer::importer::Importer;
 use crate::tile::Tile;
-use crate::tile_group::TileGroup;
+use crate::tile_group::{TileGroup, TileGroupLocation};
 use crate::SDKImporter;
 use std::fs::File;
 use std::path::Path;
@@ -41,4 +41,22 @@ pub(crate) fn assert_tile_equal(tile: &Tile, expected: &str) {
 pub(crate) fn assert_tile_group_equal(group: &TileGroup, expected: &str) {
     assert_eq!(expected.len(), 9, "Expected result should have 9 digits");
     assert_eq!(group.to_test_string(), expected);
+}
+
+#[allow(dead_code)]
+pub(crate) fn new_tile_group(spec: &str) -> TileGroup {
+    assert_eq!(spec.len(), 9, "Spec should have 9 digits");
+    let mut tiles = [Tile::new_blank(); 9];
+
+    for i in 0..9 {
+        tiles[i] = match spec.chars().nth(i).unwrap().to_string().parse::<u8>() {
+            Ok(digit) => Tile::new_known(digit),
+            Err(_) => Tile::new_blank(),
+        }
+    }
+
+    TileGroup {
+        location: TileGroupLocation::Column(0),
+        tiles,
+    }
 }

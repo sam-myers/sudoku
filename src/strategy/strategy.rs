@@ -1,5 +1,6 @@
-use crate::board::Board;
+use crate::error::Result;
+use crate::tile_group::TileGroup;
 
 pub trait Strategy {
-    fn round(&self, board: Board) -> Board;
+    fn apply(group: TileGroup) -> Result<TileGroup>;
 }

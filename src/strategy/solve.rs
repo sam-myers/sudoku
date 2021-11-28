@@ -8,7 +8,8 @@ pub fn solve(mut board: Board) -> Result<Board> {
 
     while !board.is_done() {
         pre_round_board = board;
-        board = SweepTileStrategy.round(board);
+
+        board = board.apply_strategy(SweepTileStrategy::apply)?;
 
         if pre_round_board == board {
             return Err(SudokuError::UnsolvablePuzzle);
