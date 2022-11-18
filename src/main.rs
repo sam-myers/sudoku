@@ -23,7 +23,7 @@ fn main() {
         .subcommand(
             SubCommand::with_name("solve").about("Solve a puzzle").arg(
                 Arg::with_name("input")
-                    .short("i")
+                    .short('i')
                     .required(true)
                     .takes_value(true)
                     .help("SDK file to solve"),
