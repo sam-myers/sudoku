@@ -9,5 +9,5 @@ edition = "2018"
 [dependencies]
 thiserror = "1.0"
 [dependencies.clap]
-version = "3.2.23"
+version = "3.2.25"
 features = [ "suggestions", "color" ]
